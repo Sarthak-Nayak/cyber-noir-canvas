@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   ReactFlow,
   MiniMap,
@@ -28,6 +28,9 @@ import GlassNode, { type GlassNodeType } from './GlassNode';
 import ControlPanel from './ControlPanel';
 import InfoPanel from './InfoPanel';
 import Header from './Header';
+import GhostCursorsLayer from './GhostCursorsLayer';
+import TavernChat from '../tavern/TavernChat';
+import { usePresence } from '@/hooks/usePresence';
 
 const nodeTypes = {
   glass: GlassNode,
@@ -118,6 +121,21 @@ function SpatialCanvasInner() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { zoomIn, zoomOut, fitView } = useReactFlow();
+  
+  const { otherCursors, updateCursor, isConnected, myId, myColor, myUsername } = usePresence({
+    channelName: 'skill-map-presence',
+    throttleMs: 16, // ~60fps
+  });
+
+  // Track mouse movement for presence
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      updateCursor({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [updateCursor]);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge({ ...params, animated: true }, eds)),
@@ -187,6 +205,18 @@ function SpatialCanvasInner() {
       />
       
       <InfoPanel />
+
+      {/* Ghost Cursors Layer */}
+      <GhostCursorsLayer cursors={otherCursors} />
+
+      {/* Global Tavern Chat */}
+      <TavernChat
+        isConnected={isConnected}
+        myId={myId}
+        myUsername={myUsername}
+        myColor={myColor}
+        onlineCount={otherCursors.length + 1}
+      />
 
       {/* Scanline overlay */}
       <div className="absolute inset-0 pointer-events-none scanlines" />

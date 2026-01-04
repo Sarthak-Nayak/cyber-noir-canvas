@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          cursor_color: string | null
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_class: Database["public"]["Enums"]["user_class"] | null
+          user_id: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          cursor_color?: string | null
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_class?: Database["public"]["Enums"]["user_class"] | null
+          user_id: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          cursor_color?: string | null
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_class?: Database["public"]["Enums"]["user_class"] | null
+          user_id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      tavern_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +79,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_class: "Architect" | "Sentinel" | "Scout"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +206,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_class: ["Architect", "Sentinel", "Scout"],
+    },
   },
 } as const
