@@ -101,6 +101,45 @@ export type Database = {
         }
         Relationships: []
       }
+      relics: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          rarity: string
+          theme_accent: string | null
+          theme_glow: string | null
+          theme_primary: string | null
+          theme_secondary: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          rarity?: string
+          theme_accent?: string | null
+          theme_glow?: string | null
+          theme_primary?: string | null
+          theme_secondary?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          rarity?: string
+          theme_accent?: string | null
+          theme_glow?: string | null
+          theme_primary?: string | null
+          theme_secondary?: string | null
+        }
+        Relationships: []
+      }
       tavern_messages: {
         Row: {
           content: string
@@ -121,6 +160,38 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_inventory: {
+        Row: {
+          acquired_at: string
+          id: string
+          is_equipped: boolean
+          relic_id: string
+          user_id: string
+        }
+        Insert: {
+          acquired_at?: string
+          id?: string
+          is_equipped?: boolean
+          relic_id: string
+          user_id: string
+        }
+        Update: {
+          acquired_at?: string
+          id?: string
+          is_equipped?: boolean
+          relic_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_inventory_relic_id_fkey"
+            columns: ["relic_id"]
+            isOneToOne: false
+            referencedRelation: "relics"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_progress: {
         Row: {
