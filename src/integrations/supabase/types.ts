@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      node_presence: {
+        Row: {
+          id: string
+          joined_at: string
+          node_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string
+          node_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string
+          node_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -50,6 +71,36 @@ export type Database = {
         }
         Relationships: []
       }
+      raid_sessions: {
+        Row: {
+          challenge_code: string
+          completed_at: string | null
+          id: string
+          is_active: boolean
+          node_id: string
+          solution_code: string | null
+          started_at: string
+        }
+        Insert: {
+          challenge_code: string
+          completed_at?: string | null
+          id?: string
+          is_active?: boolean
+          node_id: string
+          solution_code?: string | null
+          started_at?: string
+        }
+        Update: {
+          challenge_code?: string
+          completed_at?: string | null
+          id?: string
+          is_active?: boolean
+          node_id?: string
+          solution_code?: string | null
+          started_at?: string
+        }
+        Relationships: []
+      }
       tavern_messages: {
         Row: {
           content: string
@@ -68,6 +119,30 @@ export type Database = {
           created_at?: string
           id?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          completed_at: string
+          id: string
+          node_id: string
+          user_id: string
+          xp_earned: number
+        }
+        Insert: {
+          completed_at?: string
+          id?: string
+          node_id: string
+          user_id: string
+          xp_earned?: number
+        }
+        Update: {
+          completed_at?: string
+          id?: string
+          node_id?: string
+          user_id?: string
+          xp_earned?: number
         }
         Relationships: []
       }

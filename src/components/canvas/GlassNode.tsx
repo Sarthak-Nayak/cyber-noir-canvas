@@ -1,7 +1,8 @@
 import { memo } from 'react';
 import { Handle, Position, type NodeProps, type Node } from '@xyflow/react';
 import { motion } from 'framer-motion';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, Users } from 'lucide-react';
+import { useRaid } from '@/contexts/RaidContext';
 
 interface GlassNodeData extends Record<string, unknown> {
   label: string;
@@ -12,8 +13,15 @@ interface GlassNodeData extends Record<string, unknown> {
 
 type GlassNodeType = Node<GlassNodeData, 'glass'>;
 
-const GlassNode = memo(({ data, selected }: NodeProps<GlassNodeType>) => {
+const GlassNode = memo(({ id, data, selected }: NodeProps<GlassNodeType>) => {
   const { label, description, icon: Icon, variant = 'primary' } = data;
+  const { activeNodeId, nodePresenceCount, joinNode } = useRaid();
+  
+  const isActive = activeNodeId === id;
+
+  const handleDoubleClick = () => {
+    joinNode(id);
+  };
   
   const variantStyles = {
     primary: 'border-primary/40 hover:border-primary/60',
@@ -39,15 +47,24 @@ const GlassNode = memo(({ data, selected }: NodeProps<GlassNodeType>) => {
       animate={{ scale: 1, opacity: 1 }}
       whileHover={{ scale: 1.02 }}
       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+      onDoubleClick={handleDoubleClick}
       className={`
         relative min-w-[180px] max-w-[280px] px-5 py-4
         backdrop-blur-xl rounded-xl border
         bg-card/60
         ${variantStyles[variant]}
-        ${selected ? glowStyles[variant] : ''}
+        ${selected || isActive ? glowStyles[variant] : ''}
+        ${isActive ? 'ring-2 ring-accent ring-offset-2 ring-offset-background' : ''}
         transition-all duration-300 cursor-pointer
       `}
     >
+      {/* Active node indicator with presence count */}
+      {isActive && (
+        <div className="absolute -top-2 -right-2 flex items-center gap-1 px-2 py-0.5 bg-accent rounded-full text-xs font-bold text-accent-foreground">
+          <Users className="w-3 h-3" />
+          {nodePresenceCount}
+        </div>
+      )}
       {/* Gradient overlay */}
       <div className="absolute inset-0 rounded-xl bg-gradient-cyber opacity-50 pointer-events-none" />
       
