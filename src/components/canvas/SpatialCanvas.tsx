@@ -30,7 +30,9 @@ import InfoPanel from './InfoPanel';
 import Header from './Header';
 import GhostCursorsLayer from './GhostCursorsLayer';
 import TavernChat from '../tavern/TavernChat';
+import RaidModal from '../raid/RaidModal';
 import { usePresence } from '@/hooks/usePresence';
+import { RaidProvider } from '@/contexts/RaidContext';
 
 const nodeTypes = {
   glass: GlassNode,
@@ -218,6 +220,9 @@ function SpatialCanvasInner() {
         onlineCount={otherCursors.length + 1}
       />
 
+      {/* Raid Modal */}
+      <RaidModal />
+
       {/* Scanline overlay */}
       <div className="absolute inset-0 pointer-events-none scanlines" />
     </div>
@@ -226,9 +231,11 @@ function SpatialCanvasInner() {
 
 const SpatialCanvas = () => {
   return (
-    <ReactFlowProvider>
-      <SpatialCanvasInner />
-    </ReactFlowProvider>
+    <RaidProvider>
+      <ReactFlowProvider>
+        <SpatialCanvasInner />
+      </ReactFlowProvider>
+    </RaidProvider>
   );
 };
 
